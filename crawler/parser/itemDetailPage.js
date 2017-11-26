@@ -1,4 +1,28 @@
 import cheerio from 'cheerio'
+import moment from 'moment-timezone'
+
+const frenchMonthes = [
+  'janvier',
+  'février',
+  'mars',
+  'avril',
+  'mai',
+  'juin',
+  'juillet',
+  'août',
+  'septembre',
+  'octobre',
+  'novembre',
+  'décembre'
+]
+
+const parseDate = dateCheerioElement => {
+  let [, dayStr, monthWordStr, hourStr, minuteStr] = dateCheerioElement.text().trim().match(/Mise en ligne le (\d+) (\w+) à (\d+):(\d+)/)
+  let [day, hour, minute] = [dayStr, hourStr, minuteStr].map(str => parseInt(str))
+  let month = frenchMonthes.indexOf(monthWordStr)
+  let year = parseInt(dateCheerioElement.attr('content').split('-')[0])
+  return moment.tz([year, month, day, hour, minute], 'Europe/Paris')
+}
 
 export default itemHtml => {
 
@@ -6,6 +30,7 @@ export default itemHtml => {
 
   let detailPageData = {
     description: $('<p>' + $('[itemprop=description]').html().replace(/<br>/g, "\n") + '</p>').text().trim(),
+    date: parseDate($('[itemprop=availabilityStarts]')),
     images: (_ => {
       // no image
       if (!$('.item_image > .lazyload').length) return []
