@@ -4,10 +4,10 @@ import parseItemsListPage from './parser/itemsListPage'
 import parseItemDetailPage from './parser/itemDetailPage'
 
 export default url =>
-  request(url)
+  request( { url, encoding: 'latin1' })
     .then(parseItemsListPage)
     .then(
       itemsList => Promise.all(
         itemsList.map(
-          itemData => request(itemData.itemUrl).then(parseItemDetailPage).then(detailPageData => Object.assign({}, itemData, detailPageData))
+          itemData => request({ url: itemData.itemUrl, encoding: 'latin1' }).then(parseItemDetailPage).then(detailPageData => Object.assign({}, itemData, detailPageData))
         )))
