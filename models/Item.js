@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+require('mongoose-moment')(mongoose)
 
 const ItemImageSchema = mongoose.Schema({
   url: String,
@@ -14,5 +15,6 @@ export default mongoose.model('Item', mongoose.Schema({
   title: String,
   description: String,
   price: Number,
-  images: [ItemImageSchema]
+  images: [ItemImageSchema],
+  date: 'Moment'
 }))
