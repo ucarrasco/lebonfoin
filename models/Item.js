@@ -1,12 +1,12 @@
 import mongoose from 'mongoose'
 require('mongoose-moment')(mongoose)
 
-const ItemImageSchema = mongoose.Schema({
+const itemImageSchema = mongoose.Schema({
   url: String,
   thumbUrl: String
 })
 
-export default mongoose.model('Item', mongoose.Schema({
+const itemSchema = mongoose.Schema({
   remoteId: {
     type: String,
     unique: true
@@ -15,6 +15,9 @@ export default mongoose.model('Item', mongoose.Schema({
   title: String,
   description: String,
   price: Number,
-  images: [ItemImageSchema],
+  images: [itemImageSchema],
   date: 'Moment'
-}))
+})
+
+export default mongoose.model('Item', itemSchema)
+
