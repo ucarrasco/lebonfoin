@@ -24,7 +24,7 @@ export default html => {
       
     if ($item('.item_price').length)
       Object.assign(itemData, {
-        price: $item('.item_price').text().trim()
+        price: parseInt($item('.item_price').text().trim().match(/(\d+)\s*€/)[1])
       })
 
     itemsList.push(itemData)
