@@ -5,7 +5,7 @@ export default itemHtml => {
   const $ = cheerio.load(itemHtml)
 
   let detailPageData = {
-    description: $('[itemprop=description]').text().trim()
+    description: $('<p>' + $('[itemprop=description]').html().replace(/<br>/g, "\n") + '</p>').text().trim()
   }
 
   if ($('.thumbnails').length)
