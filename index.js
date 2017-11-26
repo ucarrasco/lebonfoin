@@ -10,20 +10,29 @@ dbConnectThen(
       .then(
         itemsList =>
           Promise.all(itemsList.map(
-            crawledItem =>
-              new Item({
-                remoteId: crawledItem.id,
-                url: crawledItem.itemUrl,
-                title: crawledItem.title,
-                description: crawledItem.description,
-                price: crawledItem.price,
-                images: crawledItem.images
-              })
-                .save()
-                .then(item => {
-                  console.log('save ok!', crawledItem)
-                })
+            crawledItem => 
+              Item.findOne({ remoteId: crawledItem.id })
+                .then(item => item ?
+                    item
+                    : new Item({
+                      remoteId: crawledItem.id,
+                      url: crawledItem.itemUrl,
+                      title: crawledItem.title,
+                      description: crawledItem.description,
+                      price: crawledItem.price,
+                      images: crawledItem.images
+                    })
+                      .save()
+                      .then(item => {
+                        console.log('save ok!', crawledItem)
+                        return item
+                      })
+                )
+              
           ))
       )
+      .then(items => {
+        // console.log(items.length)
+      })
 )
 

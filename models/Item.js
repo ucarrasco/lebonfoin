@@ -6,7 +6,10 @@ const ItemImageSchema = mongoose.Schema({
 })
 
 export default mongoose.model('Item', mongoose.Schema({
-  remoteId: String,
+  remoteId: {
+    type: String,
+    unique: true
+  },
   url: String,
   title: String,
   description: String,
