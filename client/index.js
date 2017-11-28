@@ -40,6 +40,8 @@ import App from './components/App'
 //   })
 // }
 
+require("./styles.sass")
+
 const appContainer = document.createElement('div')
 document.body.appendChild(appContainer)
 
