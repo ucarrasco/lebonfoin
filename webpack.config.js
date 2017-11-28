@@ -37,7 +37,13 @@ var config = {
   plugins: [
     new HtmlWebpackPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
-  ]
+  ],
+  node: {
+    console: true,
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty'
+  }
 };
 
 module.exports = config;
