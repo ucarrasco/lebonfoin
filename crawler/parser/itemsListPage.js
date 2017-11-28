@@ -4,6 +4,9 @@ export default html => {
   const $ = cheerio.load(html)
 
   let itemsList = []
+
+  if (!$('li[itemscope]').length)
+    return Promise.reject({ message: "There is no result to show"})
   
   $('li[itemscope]').each((index, itemNode) => {
 
@@ -11,7 +14,7 @@ export default html => {
 
     let itemData = {
       id: $item('.list_item').attr('href').match(/(\d+)\.htm/)[1],
-      itemUrl: 'https:' + $item('.list_item').attr('href'),
+      url: 'https:' + $item('.list_item').attr('href'),
       title: $item('> a').attr('title'),
       numberOfImages: $item('.item_imageNumber').length ? parseInt($item('.item_imageNumber').text().trim()) : 0
     }
