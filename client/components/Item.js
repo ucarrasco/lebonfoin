@@ -1,9 +1,9 @@
 import React from 'react'
 import { Card } from 'reactstrap'
 
-const Item = _ =>
+const Item = ({children}) =>
   <Card className="item">
-    item
+    {children}
   </Card>
 
 export default Item

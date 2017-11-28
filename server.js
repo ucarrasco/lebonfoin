@@ -37,6 +37,10 @@ app.get('/*', function(req, res, next) {
     .then(
       items => {
         res.send(items.map(item => item.toObject({ versionKey: false })))
+      },
+      error => {
+        console.log(error.stack)
+        next({error})
       }
     )
 })
