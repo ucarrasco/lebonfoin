@@ -17,7 +17,7 @@ class App extends Component {
     let { items } = this.props
     return (
       <div>
-        <Jumbotron>
+        <Jumbotron className="jumbooo">
           <h1 className="display-3">Le bon couaing</h1>
         </Jumbotron>
 
