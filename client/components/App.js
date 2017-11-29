@@ -24,7 +24,7 @@ class App extends Component {
         <Container>{
           items.map(
             (item, i) =>
-              <Item key={i}>{item.title}</Item>
+              <Item key={i} index={i} />
           )
         }
         </Container>
