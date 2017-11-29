@@ -31,6 +31,9 @@ export default itemHtml => {
   let detailPageData = {
     description: $('<p>' + $('[itemprop=description]').html().replace(/<br>/g, "\n") + '</p>').text().trim(),
     date: parseDate($('[itemprop=availabilityStarts]')),
+    location: {
+      summary: $('[itemprop="address"]').text().trim()
+    },
     images: (_ => {
       // no image
       if (!$('.item_image > .lazyload').length) return []

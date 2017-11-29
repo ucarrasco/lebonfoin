@@ -6,6 +6,10 @@ const itemImageSchema = mongoose.Schema({
   thumbUrl: String
 })
 
+const itemLocationSchema = mongoose.Schema({
+  summary: String
+})
+
 const itemSchema = mongoose.Schema({
   remoteId: {
     type: String,
@@ -14,6 +18,7 @@ const itemSchema = mongoose.Schema({
   url: String,
   title: String,
   description: String,
+  location: itemLocationSchema,
   price: Number,
   images: [itemImageSchema],
   date: 'Moment'

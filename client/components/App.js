@@ -30,7 +30,7 @@ class App extends Component {
           <h1 className="display-3">Le bon couaing</h1>
         </Jumbotron>
 
-        <Container>{
+        <Container className="d-flex justify-content-around flex-wrap">{
           items.map(
             (item, i) =>
               <Item key={i} index={i} />

@@ -4,8 +4,8 @@ import mongoose from 'mongoose'
 
 const buildItemFromCrawledItemData =
   crawledItem => {
-    let { id: remoteId, url, title, description, price, images, date } = crawledItem
-    return new Item({ remoteId, url, title, description, price, images, date })
+    let { id: remoteId, url, title, description, price, images, date, location } = crawledItem
+    return new Item({ remoteId, url, title, description, price, images, date, location })
   }
 
 export const persistCrawledItems =
