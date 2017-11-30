@@ -6,11 +6,20 @@ import request from 'request-promise-native'
 
 class App extends Component {
 
-  componentDidMount() {
+  refresh() {
     request('http://localhost:3000/ameublement/offres/languedoc_roussillon/herault/')
       .then(res => {
         this.props.addItems(JSON.parse(res))
+        setTimeout(
+          _ => {
+            this.refresh()
+          }, 3000
+        )
       })
+  }
+  
+  componentDidMount() {
+    this.refresh()
   }
 
   render() {
