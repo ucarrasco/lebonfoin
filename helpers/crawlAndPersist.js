@@ -2,7 +2,7 @@ import crawl from '../crawler'
 import Item from '../models/Item'
 import mongoose from 'mongoose'
 
-const buildItemFromCrawledItemData =
+export const buildItemFromCrawledItemData =
   crawledItem => {
     let { id: remoteId, url, title, description, price, images, date, location } = crawledItem
     return new Item({ remoteId, url, title, description, price, images, date, location })
