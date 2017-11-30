@@ -16,7 +16,11 @@ const Item = ({ url, title, description, price, images, date }) =>
         <div style={{ flex: 1 }}>{description}</div>
 
         <div className="d-flex flex-row">
-          <strong style={{ fontSize: "1.6rem", flex: 1}}>{price}€</strong>
+          <div style={{ flex: 1 }}>{
+            price !== undefined &&
+              <strong style={{ fontSize: "1.6rem" }}>{price}€</strong>
+          }
+          </div>
           {
             (images.length > 1) &&
             <div className="d-flex flex-row">{
