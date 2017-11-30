@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { Container, Card, Jumbotron } from 'reactstrap'
+import { Container, Card, Jumbotron, ButtonToolbar, ButtonGroup, Button } from 'reactstrap'
 import Item from './Item'
 import { connect } from 'react-redux'
 import request from 'request-promise-native'
+
+const pollingFrequencySec = 3
 
 class App extends Component {
 
@@ -27,15 +29,22 @@ class App extends Component {
     return (
       <div>
         <Jumbotron className="jumbooo">
-          <h1 className="display-3">Le bon couaing</h1>
+          <h1 className="display-3">Le bon foin</h1>
         </Jumbotron>
 
-        <Container className="d-flex justify-content-around flex-wrap">{
-          items.map(
-            (item, i) =>
-              <Item key={i} index={i} />
-          )
-        }
+        <Container>
+          <ButtonToolbar>
+            <ButtonGroup>
+              <Button onClick={() => { this.refresh() }}>Refresh</Button>
+            </ButtonGroup>
+          </ButtonToolbar>
+          <div className="d-flex justify-content-around flex-wrap">{
+            items.map(
+              (item, i) =>
+                <Item key={i} index={i} />
+            )
+          }
+          </div>
         </Container>
       </div>
     )
