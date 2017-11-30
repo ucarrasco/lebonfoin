@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export default function(state = { items: [] }, action) {
 
   if (action.type == 'ADD_ITEMS') {
@@ -5,7 +7,7 @@ export default function(state = { items: [] }, action) {
       ...state,
       items: [
         ...state.items,
-        ...action.items
+        ..._(action.items).reject(({ remoteId: addedItemId }) => _(state.items).find(({ remoteId: existingItemId }) => addedItemId == existingItemId)).value()
       ]
     }
   }
