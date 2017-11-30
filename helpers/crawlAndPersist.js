@@ -17,5 +17,6 @@ export const persistCrawledItems =
     ))
 
 export const crawlAndPersist = url => crawl(url).then(persistCrawledItems)
+export const crawlAndItems = url => crawl(url).then(crawledItems => crawledItems.map(buildItemFromCrawledItemData))
 
 export default crawlAndPersist
