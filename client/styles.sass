@@ -21,3 +21,16 @@ strong
 
 // .image-thumb + .image-thumb
 //   margin-left: 1em
+
+
+.item-enter
+  opacity: 0
+  transform:   translate(0, -70px)
+
+.item-enter-active
+	opacity: 1
+	transform:   translate(0,0)
+	transition: opacity 0.5s ease-in, transform 0.5s ease-in
+	// transition-property: transform, opacity
+	// transition-duration: 900ms
+	// transition-timing-function: cubic-bezier(0.175, 0.665, 0.320, 1), linear

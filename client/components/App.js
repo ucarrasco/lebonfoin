@@ -3,6 +3,8 @@ import { Container, Card, Jumbotron, ButtonToolbar, ButtonGroup, Button } from '
 import Item from './Item'
 import { connect } from 'react-redux'
 import request from 'request-promise-native'
+import _ from 'lodash'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 const pollingFrequencySec = 3
 
@@ -33,18 +35,25 @@ class App extends Component {
         </Jumbotron>
 
         <Container>
+
           <ButtonToolbar>
             <ButtonGroup>
               <Button onClick={() => { this.refresh() }}>Refresh</Button>
             </ButtonGroup>
           </ButtonToolbar>
-          <div className="d-flex justify-content-around flex-wrap">{
+
+          <ReactCSSTransitionGroup
+            transitionName="item"
+            transitionEnterTimeout={3000}
+            transitionLeaveTimeout={300}
+            component="div"
+            className="d-flex flex-column-reverse justify-content-around flex-wrap">{
             items.map(
               (item, i) =>
                 <Item key={i} index={i} />
             )
           }
-          </div>
+          </ReactCSSTransitionGroup>
         </Container>
       </div>
     )
