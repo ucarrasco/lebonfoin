@@ -36,7 +36,8 @@ var config = {
   },
   plugins: [
     new HtmlWebpackPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.DefinePlugin({ backendHost: JSON.stringify("http://localhost:3000") })
   ],
   node: {
     console: true,

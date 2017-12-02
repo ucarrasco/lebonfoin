@@ -8,13 +8,8 @@ import reducer from './reducer'
 require("../helpers/momentConfig")
 require("./styles.sass")
 
-const defaultState = {
-  items: []
-}
-
 let store = createStore(
-  reducer, 
-  defaultState, 
+  reducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
 

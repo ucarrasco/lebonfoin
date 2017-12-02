@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Card, Jumbotron, ButtonToolbar, ButtonGroup, Button } from 'reactstrap'
+import { Container, Card, Jumbotron, ButtonToolbar, ButtonGroup, Button, InputGroup, InputGroupAddon, Input } from 'reactstrap'
 import Item from './Item'
 import { connect } from 'react-redux'
 import request from 'request-promise-native'
@@ -10,15 +10,15 @@ const pollingFrequencySec = 3
 
 class App extends Component {
 
-  refresh() {
-    request('http://localhost:3000/ameublement/offres/languedoc_roussillon/herault/')
+  refresh(query = this.props.activeQuery) {
+    request(`${backendHost}${query}`)
       .then(res => {
         this.props.addItems(JSON.parse(res))
-        setTimeout(
-          _ => {
-            this.refresh()
-          }, 3000
-        )
+        // setTimeout(
+        //   _ => {
+        //     this.refresh()
+        //   }, 3000
+        // )
       })
   }
   
@@ -27,7 +27,7 @@ class App extends Component {
   }
 
   render() {
-    let { items } = this.props
+    let { items, activeQuery, queryInput, updateQueryInput, updateActiveQuery } = this.props
     return (
       <div>
         <Jumbotron className="jumbooo">
@@ -35,25 +35,36 @@ class App extends Component {
         </Jumbotron>
 
         <Container>
+          <div className="row">
+            <div className="col-xl-10">
+              <ButtonToolbar>
+                <InputGroup style={{ flex: 1 }}>
+                  <InputGroupAddon>http://www.leboncoin.fr</InputGroupAddon>
+                  <Input placeholder="/ameublement/offres/languedoc_roussillon/herault/" value={queryInput} onChange={event => { updateQueryInput(event.target.value) }} />
+                </InputGroup>
+                <ButtonGroup>{
+                  (activeQuery != queryInput) ? [
+                    <Button key="cancel" onClick={_ => { updateQueryInput(activeQuery) }}>Annuler</Button>,
+                    <Button key="submit" onClick={_ => { updateActiveQuery(queryInput); this.refresh(queryInput) }}>Ok</Button>
+                  ] : <Button key="refresh" onClick={_ => { this.refresh() }}>Refresh</Button>
+                }
+                </ButtonGroup>
+              </ButtonToolbar>
 
-          <ButtonToolbar>
-            <ButtonGroup>
-              <Button onClick={() => { this.refresh() }}>Refresh</Button>
-            </ButtonGroup>
-          </ButtonToolbar>
-
-          <ReactCSSTransitionGroup
-            transitionName="item"
-            transitionEnterTimeout={3000}
-            transitionLeaveTimeout={300}
-            component="div"
-            className="d-flex flex-column-reverse justify-content-around flex-wrap">{
-            items.map(
-              (item, i) =>
-                <Item key={i} index={i} />
-            )
-          }
-          </ReactCSSTransitionGroup>
+              <ReactCSSTransitionGroup
+                transitionName="item"
+                transitionEnterTimeout={3000}
+                transitionLeaveTimeout={300}
+                component="div"
+                className="d-flex flex-column-reverse justify-content-around flex-wrap">{
+                items.map(
+                  (item, i) =>
+                    <Item key={i} index={i} />
+                )
+              }
+              </ReactCSSTransitionGroup>
+            </div>
+          </div>
         </Container>
       </div>
     )
@@ -61,9 +72,11 @@ class App extends Component {
 }
   
 
-const mapStateToProps = ({ items }) => ({ items })
+const mapStateToProps = ({ activeQuery, queryInput, items }) => ({ activeQuery, queryInput, items })
 const mapDispatchToProps = dispatch => ({
-  addItems: items => { dispatch({ type: 'ADD_ITEMS', items })}
+  addItems: items => { dispatch({ type: 'ADD_ITEMS', items })},
+  updateQueryInput: text => { dispatch({ type: 'UPDATE_QUERY_INPUT', text})},
+  updateActiveQuery: text => { dispatch({ type: 'UPDATE_ACTIVE_QUERY', text})}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

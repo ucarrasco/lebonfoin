@@ -22,7 +22,7 @@ const Item = ({ url, title, description, price, images, date, location }) => {
   let thumbSize = images.length > 1 ? calculateThumbSize(images.length - 1) : undefined
 
   return (
-    <Card className="mt-4" style={{ width: 900 }}>
+    <Card className="mt-4">
       <a href={url} target="_blank" className="d-flex flex-row link-unstyled" style={{ minHeight: 200 }}>
         <div className="image" style={{ flex: 3, backgroundImage: (images.length ? `url('${images[0].url}')` : undefined), backgroundSize: "cover", backgroundPosition: "center" }}>{
           //images.length && <img src={images[0].thumbUrl} alt="" style={{minHeight: 200 }} />
