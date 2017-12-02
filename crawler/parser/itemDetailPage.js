@@ -17,7 +17,7 @@ const frenchMonthes = [
 ]
 
 const parseDate = dateCheerioElement => {
-  let [, dayStr, monthWordStr, hourStr, minuteStr] = dateCheerioElement.text().trim().match(/Mise en ligne le (\d+) (\w+) à (\d+):(\d+)/)
+  let [, dayStr, monthWordStr, hourStr, minuteStr] = dateCheerioElement.text().trim().match(/Mise en ligne le (\d+) ([^\s]+) à (\d+):(\d+)/)
   let [day, hour, minute] = [dayStr, hourStr, minuteStr].map(str => parseInt(str))
   let month = frenchMonthes.indexOf(monthWordStr)
   let year = parseInt(dateCheerioElement.attr('content').split('-')[0])
