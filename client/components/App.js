@@ -1,5 +1,18 @@
 import React, { Component } from 'react'
-import { Container, Card, Jumbotron, ButtonToolbar, ButtonGroup, Button, InputGroup, InputGroupAddon, Input } from 'reactstrap'
+import {
+  Container,
+  Card,
+  Jumbotron,
+  ButtonToolbar,
+  ButtonGroup,
+  Button,
+  InputGroup,
+  InputGroupAddon,
+  Input,
+  Form,
+  FormGroup,
+  Label
+} from 'reactstrap'
 import Item from './Item'
 import { connect } from 'react-redux'
 import request from 'request-promise-native'
@@ -14,11 +27,12 @@ class App extends Component {
     request(`${backendHost}${query}`)
       .then(res => {
         this.props.addItems(JSON.parse(res))
-        // setTimeout(
-        //   _ => {
-        //     this.refresh()
-        //   }, 3000
-        // )
+        if (this.props.polling)
+          setTimeout(
+            _ => {
+              this.refresh()
+            }, 3000
+          )
       })
   }
   
@@ -27,7 +41,7 @@ class App extends Component {
   }
 
   render() {
-    let { items, activeQuery, queryInput, updateQueryInput, updateActiveQuery } = this.props
+    let { items, activeQuery, queryInput, updateQueryInput, updateActiveQuery, polling, togglePolling } = this.props
     return (
       <div>
         <Jumbotron className="jumbooo">
@@ -50,6 +64,15 @@ class App extends Component {
                 }
                 </ButtonGroup>
               </ButtonToolbar>
+
+              <Form inline className="my-4">
+                <FormGroup check>
+                  <Label check>
+                    <Input type="checkbox" checked={polling} onChange={_ => { togglePolling(); if (!polling) this.refresh() }} className="mr-2" />{' '}
+                    Auto refresh
+                  </Label>
+                </FormGroup>
+              </Form>
 
               <ReactCSSTransitionGroup
                 transitionName="item"
@@ -76,7 +99,8 @@ const mapStateToProps = ({ activeQuery, queryInput, items }) => ({ activeQuery, 
 const mapDispatchToProps = dispatch => ({
   addItems: items => { dispatch({ type: 'ADD_ITEMS', items })},
   updateQueryInput: text => { dispatch({ type: 'UPDATE_QUERY_INPUT', text})},
-  updateActiveQuery: text => { dispatch({ type: 'UPDATE_ACTIVE_QUERY', text})}
+  updateActiveQuery: text => { dispatch({ type: 'UPDATE_ACTIVE_QUERY', text})},
+  togglePolling: _ => { dispatch({ type: 'TOGGLE_POLLING' })}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

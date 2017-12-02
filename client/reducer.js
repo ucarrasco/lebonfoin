@@ -3,7 +3,8 @@ import _ from 'lodash'
 const defaultState = {
   activeQuery: "/ameublement/offres/languedoc_roussillon/herault/",
   queryInput: "/ameublement/offres/languedoc_roussillon/herault/",
-  items: []
+  items: [],
+  polling: false
 }
 
 export default function(state = defaultState, action) {
@@ -29,6 +30,13 @@ export default function(state = defaultState, action) {
       ...state,
       items: [],
       activeQuery: action.text
+    }
+  }
+
+  if (action.type == 'TOGGLE_POLLING') {
+    return {
+      ...state,
+      polling: !state.polling
     }
   }
 
