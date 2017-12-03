@@ -38,7 +38,7 @@ class App extends Component {
             <div className="col-xl-10">
               <Toolbar />
               {
-                fetching ? <div style={{ marginTop: "20vh" }}><Loader /></div> :
+                fetching ? <Loader marginTop="20vh" /> :
                   <div className="d-flex flex-column-reverse justify-content-around flex-wrap">
                   {/* <ReactCSSTransitionGroup
                     transitionName="item"
