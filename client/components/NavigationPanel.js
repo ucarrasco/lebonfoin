@@ -3,7 +3,7 @@ import { toggleNavigationVisibility, submitNewQuery } from '../actionCreators'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
-const NavigationPanel = ({ navigation }) => 
+const NavigationPanel = ({ navigation, toggleNavigationVisibility, submitNewQuery }) => 
   <nav className="categories py-3 px-4">
 
     <div className="caret-container">
