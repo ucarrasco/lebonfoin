@@ -29,6 +29,7 @@ import request from 'request-promise-native'
 import _ from 'lodash'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import Loader from './Loader'
+import NavigationPanel from './NavigationPanel';
 
 const pollingFrequencySec = 3
 
@@ -87,53 +88,26 @@ class App extends Component {
                   </Label>
                 </FormGroup>
               </Form>
+
+              { navigation && showNavigation && <NavigationPanel /> }
               {
-            navigation && showNavigation && (
-              <nav className="categories py-3 px-4">
-                <div className="caret-container">
-                  <div className="caret"></div>
-                  <div className="caret-border"></div>
-                </div>
-                <ul className="list-unstyled d-flex flex-column flex-wrap" style={{ maxHeight: 405 }}>{
-                _(navigation).map(({label, query, navigation}) => [
-                  {label, query, isCategory: true},
-                  ...navigation
-                ]).flatten().value().map(
-                  ({ label, query, navigation, isCategory }, i) =>
-                    <li key={i} className={ isCategory ? "category" : undefined}>
-                      <a
-                        href={query}
-                        onClick={
-                          event => { 
-                            event.preventDefault()
-                            submitNewQuery(query)
-                            toggleNavigationVisibility()
-                            return false 
-                          }
-                        }>{label}</a>
-                    </li>
-                  )}
-                </ul>
-              </nav>
-            )}
-            {
-              fetching ? <div style={{ marginTop: "20vh" }}><Loader /></div> :
-                <div className="d-flex flex-column-reverse justify-content-around flex-wrap">
-                {/* <ReactCSSTransitionGroup
-                  transitionName="item"
-                  transitionEnterTimeout={3000}
-                  transitionLeaveTimeout={300}
-                  component="div"
-                  className="d-flex flex-column-reverse justify-content-around flex-wrap"> */}
-                  {
-                  items.map(
-                    (item, i) =>
-                      <Item key={i} index={i} />
-                  )
-                }
-                {/* </ReactCSSTransitionGroup> */}
-                </div>
-            }
+                fetching ? <div style={{ marginTop: "20vh" }}><Loader /></div> :
+                  <div className="d-flex flex-column-reverse justify-content-around flex-wrap">
+                  {/* <ReactCSSTransitionGroup
+                    transitionName="item"
+                    transitionEnterTimeout={3000}
+                    transitionLeaveTimeout={300}
+                    component="div"
+                    className="d-flex flex-column-reverse justify-content-around flex-wrap"> */}
+                    {
+                    items.map(
+                      (item, i) =>
+                        <Item key={i} index={i} />
+                    )
+                  }
+                  {/* </ReactCSSTransitionGroup> */}
+                  </div>
+              }
             </div>
           </div>
         </Container>
