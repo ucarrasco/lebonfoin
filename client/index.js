@@ -2,15 +2,17 @@ import React from 'react'
 import {render} from 'react-dom'
 import App from './components/App'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import reducer from './reducer'
+import thunk from 'redux-thunk'
+import { composeWithDevTools } from 'redux-devtools-extension'
 
 require("../helpers/momentConfig")
 require("./styles.sass")
 
 let store = createStore(
   reducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  composeWithDevTools(applyMiddleware(thunk))
 )
 
 const appContainer = document.createElement('div')

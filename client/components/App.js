@@ -13,6 +13,16 @@ import {
   FormGroup,
   Label
 } from 'reactstrap'
+import {
+  addItems,
+  updateQueryInput,
+  togglePolling,
+  setNavigation,
+  toggleNavigationVisibility,
+  fetchItems,
+  loadNewItems,
+  submitNewQuery
+} from '../actionCreators'
 import Item from './Item'
 import { connect } from 'react-redux'
 import request from 'request-promise-native'
@@ -22,23 +32,10 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 const pollingFrequencySec = 3
 
 class App extends Component {
-
-  refresh(query = this.props.activeQuery) {
-    request(`${backendHost}${query}`)
-      .then(res => {
-        this.props.addItems(JSON.parse(res))
-        if (this.props.polling)
-          setTimeout(
-            _ => {
-              this.refresh()
-            }, 3000
-          )
-      })
-  }
   
   componentDidMount() {
     request(`${backendHost}/app/navigation`).then(navStr => { this.props.setNavigation(JSON.parse(navStr))})
-    this.refresh()
+    this.props.fetchItems()
   }
 
   render() {
@@ -47,12 +44,14 @@ class App extends Component {
       activeQuery,
       queryInput,
       updateQueryInput,
-      updateActiveQuery,
       polling,
       togglePolling,
       navigation,
       showNavigation,
-      toggleNavigationVisibility
+      toggleNavigationVisibility,
+      fetchItems,
+      loadNewItems,
+      submitNewQuery
     } = this.props
     return (
       <div>
@@ -71,8 +70,8 @@ class App extends Component {
                 <ButtonGroup>{
                   (activeQuery != queryInput) ? [
                     <Button key="cancel" onClick={_ => { updateQueryInput(activeQuery) }}>Annuler</Button>,
-                    <Button key="submit" onClick={_ => { updateActiveQuery(queryInput); this.refresh(queryInput) }}>Ok</Button>
-                  ] : <Button key="refresh" onClick={_ => { this.refresh() }}>Refresh</Button>
+                    <Button key="submit" onClick={_ => { submitNewQuery(queryInput) }}>Ok</Button>
+                  ] : <Button key="refresh" onClick={_ => { loadNewItems() }}>Refresh</Button>
                 }
                 </ButtonGroup>
               </ButtonToolbar>
@@ -81,7 +80,7 @@ class App extends Component {
                 <Button className="mr-4 px-4" onClick={toggleNavigationVisibility}>Catégories</Button>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" checked={polling} onChange={_ => { togglePolling(); if (!polling) this.refresh() }} className="mr-2" />{' '}
+                    <Input type="checkbox" checked={polling} onChange={_ => { togglePolling(); if (!polling) loadNewItems() }} className="mr-2" />{' '}
                     Auto refresh
                   </Label>
                 </FormGroup>
@@ -105,8 +104,7 @@ class App extends Component {
                         onClick={
                           event => { 
                             event.preventDefault()
-                            updateActiveQuery(query)
-                            this.refresh(query)
+                            submitNewQuery(query)
                             toggleNavigationVisibility()
                             return false 
                           }
@@ -154,13 +152,15 @@ const mapStateToProps = ({
   showNavigation 
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  addItems: items => { dispatch({ type: 'ADD_ITEMS', items })},
-  updateQueryInput: text => { dispatch({ type: 'UPDATE_QUERY_INPUT', text})},
-  updateActiveQuery: text => { dispatch({ type: 'UPDATE_ACTIVE_QUERY', text})},
-  togglePolling: _ => { dispatch({ type: 'TOGGLE_POLLING' })},
-  setNavigation: navigation => { dispatch({ type: 'SET_NAVIGATION', navigation })},
-  toggleNavigationVisibility: _ => { dispatch({ type: 'TOGGLE_NAVIGATION_VISIBILITY' })}
-})
+const mapDispatchToProps = dispatch => _({
+  addItems,
+  updateQueryInput,
+  togglePolling,
+  setNavigation,
+  toggleNavigationVisibility,
+  fetchItems,
+  loadNewItems,
+  submitNewQuery
+}).mapValues(actionCreator => (...actionCreatorParams) => { dispatch(actionCreator(...actionCreatorParams)) }).value()
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
