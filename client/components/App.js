@@ -28,6 +28,7 @@ import { connect } from 'react-redux'
 import request from 'request-promise-native'
 import _ from 'lodash'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import Loader from './Loader'
 
 const pollingFrequencySec = 3
 
@@ -51,7 +52,8 @@ class App extends Component {
       toggleNavigationVisibility,
       fetchItems,
       loadNewItems,
-      submitNewQuery
+      submitNewQuery,
+      itemsFetch: { fetching }
     } = this.props
     return (
       <div>
@@ -114,21 +116,24 @@ class App extends Component {
                 </ul>
               </nav>
             )}
-              <div className="d-flex flex-column-reverse justify-content-around flex-wrap">
-              {/* <ReactCSSTransitionGroup
-                transitionName="item"
-                transitionEnterTimeout={3000}
-                transitionLeaveTimeout={300}
-                component="div"
-                className="d-flex flex-column-reverse justify-content-around flex-wrap"> */}
-                {
-                items.map(
-                  (item, i) =>
-                    <Item key={i} index={i} />
-                )
-              }
-              {/* </ReactCSSTransitionGroup> */}
-              </div>
+            {
+              fetching ? <div style={{ marginTop: "20vh" }}><Loader /></div> :
+                <div className="d-flex flex-column-reverse justify-content-around flex-wrap">
+                {/* <ReactCSSTransitionGroup
+                  transitionName="item"
+                  transitionEnterTimeout={3000}
+                  transitionLeaveTimeout={300}
+                  component="div"
+                  className="d-flex flex-column-reverse justify-content-around flex-wrap"> */}
+                  {
+                  items.map(
+                    (item, i) =>
+                      <Item key={i} index={i} />
+                  )
+                }
+                {/* </ReactCSSTransitionGroup> */}
+                </div>
+            }
             </div>
           </div>
         </Container>
@@ -143,13 +148,15 @@ const mapStateToProps = ({
   queryInput,
   items,
   navigation,
-  showNavigation 
+  showNavigation,
+  itemsFetch
 }) => ({
   activeQuery,
   queryInput,
   items,
   navigation,
-  showNavigation 
+  showNavigation,
+  itemsFetch
 })
 
 const mapDispatchToProps = dispatch => _({
