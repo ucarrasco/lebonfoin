@@ -18,7 +18,6 @@ const calculateThumbSize = numberOfItems => {
 }
 
 const Item = ({ url, title, description, price, images, date, location }) => {
-  
   let thumbSize = images.length > 1 ? calculateThumbSize(images.length - 1) : undefined
 
   return (

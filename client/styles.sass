@@ -3,14 +3,56 @@
 
 $strong-orange: #ffa831
 $jumbo: #fb6a57
+$bg-color: #f7f7f7
 
 body
-  background-color: #f7f7f7
+  background-color: $bg-color
 
 .jumbooo
   background-color: $jumbo
   color: white
   border-radius: 0
+  // a, a:hover, a:focus
+  //   color: inherit
+  //   color: rgba(white, 0.9)
+
+nav.categories
+  font-weight: 300px
+  position: absolute
+  z-index: 1
+  background: $bg-color
+  width: 100%
+  padding: 20px 0
+  border-top: solid 1px rgba(black, 0.19)
+  border-bottom: solid 1px rgba(black, 0.19)
+  box-shadow: 0 3px 10px rgba(black,0.2)
+  border-radius: 5px
+  font-size: 0.8rem
+  li
+    margin-right: 30px
+    &.category
+      margin-top : 1em
+      margin-bottom: 5px
+      border-bottom: solid 1px rgba(#0275d8, 0.5)
+  a:hover
+    color: #0275d8
+  .caret-container
+    // position: absolute
+    .caret, .caret-border
+      $size: 10px
+      width: $size * 2
+      height: $size * 2
+      border: solid $size rgba(black, 0)
+      position: absolute
+      margin-left: 30px
+    .caret
+      border-bottom-color: $bg-color
+      top: -20px
+      z-index: 2
+    .caret-border
+      border-bottom-color: rgba(black, 0.19)
+      top: -21px
+      z-index: 1
 
 strong
   color: $strong-orange

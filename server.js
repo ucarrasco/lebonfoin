@@ -3,7 +3,9 @@ import express from 'express'
 import dbConnect from './helpers/dbHelper'
 import configExpress from './config/express'
 import Item from './models/Item'
-import crawlAndPersist from './helpers/crawlAndPersist'
+import crawlAndPersist, { buildItemFromCrawledItemData } from './helpers/crawlAndPersist'
+import crawl, { crawlNavigation } from './crawler'
+import moment from 'moment-timezone'
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason)
@@ -29,6 +31,10 @@ app.use(function(req, res, next) {
 //     next
 //   )
 // })
+
+app.get("/app/navigation", function(req, res, next) {
+  crawlNavigation().then(navigation => { res.send(navigation) })
+})
 
 app.get('/*', function(req, res, next) {
   let leboncoinQuery = req.params[0]

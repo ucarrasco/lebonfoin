@@ -3,6 +3,8 @@ mongoose.Promise = global.Promise
 import dbConnect from './helpers/dbHelper'
 import { crawlAndItems } from './helpers/crawlAndPersist'
 import Item from './models/Item'
+import moment from 'moment-timezone'
+import { crawlNavigation } from './crawler'
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason)
@@ -18,9 +20,8 @@ process.on('unhandledRejection', (reason, p) => {
 //   .finally(_ => { mongoose.disconnect() })
 
 
+// crawlAndItems('https://www.leboncoin.fr/ameublement/offres/languedoc_roussillon/herault/')
 
-crawlAndItems('https://www.leboncoin.fr/ameublement/offres/languedoc_roussillon/herault/')
-  .then(items => {
-    console.log('Crawl ok')
-    return items
-  })
+crawlNavigation().then(navigation => {
+  console.log(JSON.stringify(navigation, null, 2))
+})

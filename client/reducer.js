@@ -1,9 +1,11 @@
 import _ from 'lodash'
 
 const defaultState = {
+  items: [],
+  navigation: undefined,
+  showNavigation: false,
   activeQuery: "/ameublement/offres/languedoc_roussillon/herault/",
   queryInput: "/ameublement/offres/languedoc_roussillon/herault/",
-  items: [],
   polling: false
 }
 
@@ -29,7 +31,8 @@ export default function(state = defaultState, action) {
     return {
       ...state,
       items: [],
-      activeQuery: action.text
+      activeQuery: action.text,
+      queryInput: action.text
     }
   }
 
@@ -39,6 +42,18 @@ export default function(state = defaultState, action) {
       polling: !state.polling
     }
   }
+
+  if (action.type == 'SET_NAVIGATION')
+    return {
+      ...state,
+      navigation: action.navigation
+    }
+
+  if (action.type == 'TOGGLE_NAVIGATION_VISIBILITY')
+    return {
+      ...state,
+      showNavigation: !state.showNavigation
+    }
 
   return state
 }

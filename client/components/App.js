@@ -37,11 +37,23 @@ class App extends Component {
   }
   
   componentDidMount() {
+    request(`${backendHost}/app/navigation`).then(navStr => { this.props.setNavigation(JSON.parse(navStr))})
     this.refresh()
   }
 
   render() {
-    let { items, activeQuery, queryInput, updateQueryInput, updateActiveQuery, polling, togglePolling } = this.props
+    let {
+      items,
+      activeQuery,
+      queryInput,
+      updateQueryInput,
+      updateActiveQuery,
+      polling,
+      togglePolling,
+      navigation,
+      showNavigation,
+      toggleNavigationVisibility
+    } = this.props
     return (
       <div>
         <Jumbotron className="jumbooo">
@@ -52,7 +64,7 @@ class App extends Component {
           <div className="row">
             <div className="col-xl-10">
               <ButtonToolbar>
-                <InputGroup style={{ flex: 1 }}>
+                <InputGroup style={{ flex: 1 }} className="mr-2">
                   <InputGroupAddon>http://www.leboncoin.fr</InputGroupAddon>
                   <Input placeholder="/ameublement/offres/languedoc_roussillon/herault/" value={queryInput} onChange={event => { updateQueryInput(event.target.value) }} />
                 </InputGroup>
@@ -66,6 +78,7 @@ class App extends Component {
               </ButtonToolbar>
 
               <Form inline className="my-4">
+                <Button className="mr-4 px-4" onClick={toggleNavigationVisibility}>Catégories</Button>
                 <FormGroup check>
                   <Label check>
                     <Input type="checkbox" checked={polling} onChange={_ => { togglePolling(); if (!polling) this.refresh() }} className="mr-2" />{' '}
@@ -73,19 +86,51 @@ class App extends Component {
                   </Label>
                 </FormGroup>
               </Form>
-
-              <ReactCSSTransitionGroup
+              {
+            navigation && showNavigation && (
+              <nav className="categories py-3 px-4">
+                <div className="caret-container">
+                  <div className="caret"></div>
+                  <div className="caret-border"></div>
+                </div>
+                <ul className="list-unstyled d-flex flex-column flex-wrap" style={{ maxHeight: 405 }}>{
+                _(navigation).map(({label, query, navigation}) => [
+                  {label, query, isCategory: true},
+                  ...navigation
+                ]).flatten().value().map(
+                  ({ label, query, navigation, isCategory }, i) =>
+                    <li key={i} className={ isCategory ? "category" : undefined}>
+                      <a
+                        href={query}
+                        onClick={
+                          event => { 
+                            event.preventDefault()
+                            updateActiveQuery(query)
+                            this.refresh(query)
+                            toggleNavigationVisibility()
+                            return false 
+                          }
+                        }>{label}</a>
+                    </li>
+                  )}
+                </ul>
+              </nav>
+            )}
+              <div className="d-flex flex-column-reverse justify-content-around flex-wrap">
+              {/* <ReactCSSTransitionGroup
                 transitionName="item"
                 transitionEnterTimeout={3000}
                 transitionLeaveTimeout={300}
                 component="div"
-                className="d-flex flex-column-reverse justify-content-around flex-wrap">{
+                className="d-flex flex-column-reverse justify-content-around flex-wrap"> */}
+                {
                 items.map(
                   (item, i) =>
                     <Item key={i} index={i} />
                 )
               }
-              </ReactCSSTransitionGroup>
+              {/* </ReactCSSTransitionGroup> */}
+              </div>
             </div>
           </div>
         </Container>
@@ -95,12 +140,27 @@ class App extends Component {
 }
   
 
-const mapStateToProps = ({ activeQuery, queryInput, items }) => ({ activeQuery, queryInput, items })
-const mapDispatchToProps = dispatch => ({
+const mapStateToProps = ({
+  activeQuery,
+  queryInput,
+  items,
+  navigation,
+  showNavigation 
+}) => ({
+  activeQuery,
+  queryInput,
+  items,
+  navigation,
+  showNavigation 
+})
+
+const mapDispatchToProps = (dispatch) => ({
   addItems: items => { dispatch({ type: 'ADD_ITEMS', items })},
   updateQueryInput: text => { dispatch({ type: 'UPDATE_QUERY_INPUT', text})},
   updateActiveQuery: text => { dispatch({ type: 'UPDATE_ACTIVE_QUERY', text})},
-  togglePolling: _ => { dispatch({ type: 'TOGGLE_POLLING' })}
+  togglePolling: _ => { dispatch({ type: 'TOGGLE_POLLING' })},
+  setNavigation: navigation => { dispatch({ type: 'SET_NAVIGATION', navigation })},
+  toggleNavigationVisibility: _ => { dispatch({ type: 'TOGGLE_NAVIGATION_VISIBILITY' })}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
