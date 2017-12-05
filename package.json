@@ -6,7 +6,7 @@
   "scripts": {
     "start": "echo \"Run \\\"yarn front\\\" for front app or \\\"yarn back\\\" for server\"",
     "back": "./node_modules/.bin/nodemon --exec node_modules/.bin/babel-node server.js",
-    "front": "./node_modules/.bin/webpack-dev-server --hot",
+    "front": "./node_modules/.bin/webpack-dev-server",
     "crawl": "./node_modules/.bin/babel-node runTestCrawl.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
