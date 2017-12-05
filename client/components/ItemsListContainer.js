@@ -13,18 +13,20 @@ import Loader from './Loader'
 {/* </ReactCSSTransitionGroup> */}
 
 
-const ItemListContainer = ({children, fetching }) => 
+const ItemListContainer = ({children, items, fetching }) => 
   <Row>
     <Col xl="10">
-      <Toolbar />{
-        fetching ? 
-          <Loader marginTop="20vh" /> 
-          : (
-            <div className="d-flex flex-column-reverse justify-content-around flex-wrap">
-              { children }
-            </div>
-          )
-      }
+      <Toolbar />
+      {(
+        (fetching && items.length == 0) &&
+          <Loader style={{ marginTop: "20vh" }} />
+      )}
+      <div style={{ height: 60 }}>
+        { (fetching && items.length) && <Loader /> }
+      </div>
+      <div className="d-flex flex-column-reverse justify-content-around flex-wrap">
+        { children }
+      </div>
     </Col>
   </Row>
 
