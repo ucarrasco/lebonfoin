@@ -32,8 +32,8 @@ export default function(state = defaultState, action) {
       return {
         ...state,
         items: [
-          ...state.items,
-          ..._(action.items).reject(({ remoteId: addedItemId }) => _(state.items).find(({ remoteId: existingItemId }) => addedItemId == existingItemId)).value()
+          ..._(action.items).reject(({ remoteId: addedItemId }) => _(state.items).find(({ remoteId: existingItemId }) => addedItemId == existingItemId)).sortBy(item => 0-item.date).value(),
+          ...state.items
         ]
       }
     
@@ -94,7 +94,7 @@ export default function(state = defaultState, action) {
     case SET_ITEMS:
       return {
         ...state,
-        items: action.items
+        items: _(action.items).sortBy(item => 0-item.date).value()
       }
   }
 
