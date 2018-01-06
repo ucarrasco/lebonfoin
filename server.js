@@ -7,6 +7,7 @@ import crawlAndPersist, { buildItemFromCrawledItemData } from './helpers/crawlAn
 import crawl, { crawlNavigation } from './crawler'
 import moment from 'moment-timezone'
 import { stringify as stringifyQuery } from 'qs'
+import webpackConfig from './webpack.config'
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason)
@@ -17,20 +18,15 @@ const port = process.env.PORT || 3000
 const app = express()
 configExpress(app)
 
-// app.get('/items', function(req, res, next) {
-//   Item.find().sort({date: 'desc'}).then(
-//     items => {
-//       res.send(items.map(item => item.toObject({ versionKey: false })))
-//     },
-//     next
-//   )
+// app.use('/api', function(req, res, next) {
+//   res.send({api: "yes", url: req.url})
 // })
 
-app.get("/app/navigation", function(req, res, next) {
+app.get("/api/app/navigation", function(req, res, next) {
   crawlNavigation().then(navigation => { res.send(navigation) })
 })
 
-app.get('/*', function(req, res, next) {
+app.get('/api/*', function(req, res, next) {
 
   let path = req.params[0]
   let queryParams = stringifyQuery(req.query, { encode: false })
@@ -48,6 +44,32 @@ app.get('/*', function(req, res, next) {
       }
     )
 })
+
+
+app.get('*', function (req, res, next) {
+  res.send(`<!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>Webpack App</title>
+      </head>
+      <body>${
+        req.url != '/' ? `
+        <script type="text/javascript">var query="${req.url}";</script>` : '' }
+        <script type="text/javascript" src="${webpackConfig.output.publicPath}${webpackConfig.output.filename}"></script>
+      </body>
+    </html>
+`)
+})
+
+// app.get('/tetest', function(req, res, next) {
+//   console.log({fly: req.headers.accept })
+//   if (req.accepts('text/html'))
+//     res.send('<p><strong>Hello world!</strong></p>')
+//   else
+//     res.send({foo: "bar"})
+// })
+
 
 dbConnect()
   .then(

@@ -4,7 +4,6 @@ var path = require('path');
 var BUILD_DIR = path.resolve(__dirname, 'assets');
 var APP_DIR = path.resolve(__dirname, 'client');
 
-var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var config = {
   entry: APP_DIR + '/index.js',
@@ -36,9 +35,8 @@ var config = {
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.DefinePlugin({ backendHost: JSON.stringify("http://localhost:3000") }),
+    new webpack.DefinePlugin({ backendHost: JSON.stringify("http://localhost:3000/api") }),
     new webpack.HotModuleReplacementPlugin()
   ],
   node: {

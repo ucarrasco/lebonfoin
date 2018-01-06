@@ -22,10 +22,10 @@ const NavigationPanel = ({ navigation, toggleNavigationVisibility, submitNewQuer
             href={query}
             onClick={
               event => { 
-                event.preventDefault()
-                toggleNavigationVisibility()
-                submitNewQuery(query)
-                return false 
+                // event.preventDefault()
+                // toggleNavigationVisibility()
+                // submitNewQuery(query)
+                // return false 
               }
             }>{label}</a>
         </li>
