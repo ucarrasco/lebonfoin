@@ -11,18 +11,7 @@ import {
   SET_ITEMS
 } from './actionCreators'
 
-const defaultState = {
-  items: [],
-  navigation: undefined,
-  showNavigation: false,
-  activeQuery: "/ameublement/offres/languedoc_roussillon/herault/",
-  queryInput: "/ameublement/offres/languedoc_roussillon/herault/",
-  polling: false,
-  itemsFetch: {
-    fetching: false
-  },
-  pollingFrequencyMs: 3000
-}
+import defaultState from './defaultState'
 
 export default function(state = defaultState, action) {
 
