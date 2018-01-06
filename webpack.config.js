@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 var path = require('path');
 
-var BUILD_DIR = path.resolve(__dirname, 'dist');
+var BUILD_DIR = path.resolve(__dirname, 'assets');
 var APP_DIR = path.resolve(__dirname, 'client');
 
 var HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -10,7 +10,8 @@ var config = {
   entry: APP_DIR + '/index.js',
   output: {
     path: BUILD_DIR,
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    publicPath: '/assets/'
   },
   module : {
     rules : [

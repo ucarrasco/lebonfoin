@@ -2,7 +2,7 @@
   "verbose": true,
   "ignore": [
     "client/",
-    "dist/",
+    "assets/",
     "node_modules/"
   ]
 }
