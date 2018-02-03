@@ -1,61 +1,33 @@
 import cheerio from 'cheerio'
 import moment from 'moment-timezone'
 
-const frenchMonthes = [
-  'janvier',
-  'février',
-  'mars',
-  'avril',
-  'mai',
-  'juin',
-  'juillet',
-  'août',
-  'septembre',
-  'octobre',
-  'novembre',
-  'décembre'
-]
-
-const parseDate = dateCheerioElement => {
-  let [, dayStr, monthWordStr, hourStr, minuteStr] = dateCheerioElement.text().trim().match(/Mise en ligne le (\d+) ([^\s]+) à (\d+):(\d+)/)
-  let [day, hour, minute] = [dayStr, hourStr, minuteStr].map(str => parseInt(str))
-  let month = frenchMonthes.indexOf(monthWordStr)
-  let year = parseInt(dateCheerioElement.attr('content').split('-')[0])
-  return moment.tz([year, month, day, hour, minute], 'Europe/Paris')
-}
-
 export default itemHtml => {
 
   const $ = cheerio.load(itemHtml)
 
   let detailPageData = {
-    description: $('<p>' + $('[itemprop=description]').html().replace(/<br>/g, "\n") + '</p>').text().trim(),
-    date: parseDate($('[itemprop=availabilityStarts]')),
+    description: $('<p>' + $('[data-qa-id=adview_description_container] > :first-child > span').html().replace(/<br>/g, "\n") + '</p>').text().trim(),
+    date: moment.tz($('[data-qa-id=adview_date]').text().trim(), "DD/MM/YYYY [à] HH[h]mm", 'Europe/Paris'),
     location: {
-      summary: $('[itemprop="address"]').text().trim()
+      summary: $('[data-qa-id="adview_location_informations"] > span:first-child').text().trim()
     },
     images: (_ => {
       // no image
-      if (!$('.item_image > .lazyload').length) return []
+      if (!$('[data-qa-id=adview_gallery_container]').length) return []
 
-      let multipleImagesMatch = itemHtml.match(/images\[\d\] = "[^"]+";/g)
-      
-      // multiple images
-      if (multipleImagesMatch)
-        return multipleImagesMatch
-            .map(matchLine => matchLine.match(/images\[\d\] = "([^"]+)";/)[1])
-            .map(imgUrl => ({
-              url: imgUrl, 
-              thumbUrl: imgUrl.replace('/ad-large/', '/ad-thumb/')
-            }))
+      let fluxStateData = JSON.parse(itemHtml.match(/<script>window\.FLUX_STATE = (.+);?<\/script>/)[1])
+      // console.log(JSON.stringify(fluxStateData, null, 2))
 
-      // one image
-      return [{
-        url: $('.item_image > .lazyload').data('imgsrc').replace('/ad-image/', '/ad-large/'),
-        thumbUrl: $('.item_image > .lazyload').data('imgsrc').replace('/ad-image/', '/ad-thumb/')
-      }]
+      return fluxStateData.adview.images.urls_large.map(
+        largeUrl => ({
+          url: largeUrl, 
+          thumbUrl: largeUrl.replace('/ad-large/', '/ad-thumb/')
+        })
+      )
     })()
   }
 
   return detailPageData
 }
+
+// <script>window.FLUX_STATE = 

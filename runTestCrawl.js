@@ -5,6 +5,9 @@ import { crawlAndItems } from './helpers/crawlAndPersist'
 import Item from './models/Item'
 import moment from 'moment-timezone'
 import { crawlNavigation } from './crawler'
+import request from 'request-promise-native'
+import parseItemDetailPage from './crawler/parser/itemDetailPage'
+import parseItemsListPage from './crawler/parser/itemsListPage'
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason)
@@ -20,8 +23,14 @@ process.on('unhandledRejection', (reason, p) => {
 //   .finally(_ => { mongoose.disconnect() })
 
 
-// crawlAndItems('https://www.leboncoin.fr/ameublement/offres/languedoc_roussillon/herault/')
+// crawlAndItems('https://www.leboncoin.fr/electromenager/offres/languedoc_roussillon/herault/')
+//   .then(console.log)
 
-crawlNavigation().then(navigation => {
-  console.log(JSON.stringify(navigation, null, 2))
-})
+request({ url: 'https://www.leboncoin.fr/electromenager/1379109998.htm?ca=13_s' })
+  .then(parseItemDetailPage)
+  .then(console.log)
+
+// crawlNavigation().then(navigation => {
+//   console.log(JSON.stringify(navigation, null, 2))
+// })
+

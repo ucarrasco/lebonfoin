@@ -16,7 +16,7 @@ export default url =>
       itemsList => Promise.all(
         itemsList.map(
           itemData =>
-            request({ url: itemData.url, encoding: 'latin1' })
+            request({ url: itemData.url })
               .then(parseItemDetailPage)
               .then(detailPageData => Object.assign({}, itemData, detailPageData))
         )))
