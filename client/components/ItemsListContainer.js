@@ -22,7 +22,7 @@ const ItemListContainer = ({children, items, fetching }) =>
           <Loader style={{ marginTop: "20vh" }} />
       )}
       <div style={{ height: 60 }}>
-        { (fetching && items.length) && <Loader /> }
+        { (fetching && items.length) ? <Loader /> : undefined }
       </div>
       <div className="d-flex flex-column-reverse justify-content-around flex-wrap">
         { children }
