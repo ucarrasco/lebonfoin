@@ -24,7 +24,7 @@ const ItemListContainer = ({children, items, fetching }) =>
       <div style={{ height: 60 }}>
         { (fetching && items.length) ? <Loader /> : undefined }
       </div>
-      <div className="d-flex flex-column-reverse justify-content-around flex-wrap">
+      <div className="d-flex flex-column justify-content-around flex-wrap">
         { children }
       </div>
     </Col>
