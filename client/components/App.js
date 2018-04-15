@@ -21,6 +21,7 @@ class App extends Component {
       <div>
         <Jumbotron className="jumbooo">
           <h1 className="display-3">Le bon foin</h1>
+          <div className="baseline">Trouvez l'aiguille dans votre site d'annonces préféré !</div>
         </Jumbotron>
 
         <Container>
