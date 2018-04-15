@@ -38,6 +38,7 @@ const Toolbar = ({
 
       <InputGroup style={{ flex: 1 }} className="mr-2">
         <InputGroupAddon>http://www.leboncoin.fr</InputGroupAddon>
+        <span className="address-instructions"><div>ex: /ameublement/offres/languedoc_roussillon/herault/</div></span>
         <Input placeholder="/ameublement/offres/languedoc_roussillon/herault/" value={queryInput} onChange={event => { updateQueryInput(event.target.value) }} />
       </InputGroup>
 
